@@ -29,6 +29,7 @@ private Instant dateTime;
 
 
 public IOU() {
+    this(null,null,BigDecimal.ZERO,Instant.now());
 }
 
 public IOU(String borrower,String lender,BigDecimal amount,Instant dateTime){
@@ -57,8 +58,8 @@ public String getLender(){
 
 }
 
-public void setLender(String borrower){
-    this.borrower=borrower;
+public void setLender(String lender){
+    this.lender =lender;
 }
 
     public BigDecimal getAmount(){

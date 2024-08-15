@@ -111,6 +111,7 @@ public class IOUControllerTest {
 		verify(iouService).getAllIOUs();
 	}
 
+	@SuppressWarnings("null")
 	@Test
 	@Description("GET /api/ious/{id} returns matching IOU")
 	void getIOUById() {
@@ -126,7 +127,7 @@ public class IOUControllerTest {
 		// Assert
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
-		//assertEquals(iou.getId(),response.getBody().getId());
+		assertEquals(iou.getId(),response.getBody().getId());
 		verify(iouService).getIOU(iou.getId());
 	}
 
