@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ public class IOUController {
         this.iouService=iouService;
     }
 
-
+    // getAllIOUS
     @GetMapping(produces = "application/json" )
   public ResponseEntity<List<IOU>> getAllIOUs(){
         List<IOU>ious=iouService.getAllIOUs();
@@ -68,8 +69,9 @@ public class IOUController {
 
     //delete
     @DeleteMapping(value="/{id}",produces ="application/json")
-    public IOU deleteIou(@PathVariable UUID id) {
-       return iouService.deleteIOU(id);
-    }
+    public ResponseEntity <IOU> deleteIou(@PathVariable UUID id) {
+        iouService.deleteIOU(id);
+       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
+    }
 }
