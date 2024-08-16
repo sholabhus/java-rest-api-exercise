@@ -40,7 +40,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.cbfacademy.restapiexercise.RestApiExerciseApplication;
 
-
     @SpringBootTest(classes = RestApiExerciseApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class IOUControllerTest {
 
@@ -87,6 +86,9 @@ public class IOUControllerTest {
 
 		// Act
 		ResponseEntity<IOU> response = restTemplate.postForEntity(baseURI.toString(), iou, IOU.class);
+
+	
+
 
 		// Assert
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());

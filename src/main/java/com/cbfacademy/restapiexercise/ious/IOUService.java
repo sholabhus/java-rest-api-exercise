@@ -35,9 +35,11 @@ public class IOUService {
             throw new IllegalArgumentException("IOU cannot be null");
         }
 
+        
+
         try {
-            IOU savedIou = iouRepository.save(iou);
-            return savedIou;
+            iouRepository.save(iou);
+            return iou;
         } catch (OptimisticLockingFailureException e) {
             // Log the exception if needed
             // For example: logger.error("Optimistic locking failure", e);
@@ -51,22 +53,31 @@ public class IOUService {
 
 
    public IOU updateIOU(UUID id, IOU updatedIOU) throws NoSuchElementException {
-   IOU existiingIou =getIOU(id);
-    return iouRepository.save(existiingIou);
+    //retrieve existing IOU
+   IOU existingIou =getIOU(id);
+   // update the fields with new data
+   existingIou.setAmount(updatedIOU.getAmount());
+   existingIou.setBorrower(updatedIOU.getBorrower());
+   existingIou.setDateTime(updatedIOU.getDateTime());
+   existingIou.setLender(updatedIOU.getLender());
+    return iouRepository.save(existingIou);
    }
 
-   public IOU deleteIOU(UUID id){
-    Optional<IOU> optionalIou =iouRepository.findById(id);
-    if(optionalIou.isPresent()) {
-        IOU iou=optionalIou.get();
-        iouRepository.deleteById(id);
-        return iou;
-    } else {
-        throw new NoSuchElementException( "No Record Found");
+   public IOU deleteIOU(UUID id) {
+    if (!iouRepository.existsById(id)) {
+        throw new NoSuchElementException("IOU with ID " + id + " not found");
+    }
+    iouRepository.deleteById(id);  // Delete the IOU by id
+    
+}
+
+
+public IOU findIOUById(UUID id) {
+    Optional<IOU> iou = iouRepository.findById(id);
+        return iou.orElse(null); // Return IOU if found, otherwise return null
     }
 }
 
-}
 
    
 

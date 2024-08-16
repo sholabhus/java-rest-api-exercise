@@ -1,6 +1,7 @@
 package com.cbfacademy.restapiexercise.ious;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,30 +37,37 @@ public class IOUController {
         
     }
 
+    //getIOU
     @GetMapping(value="/{id}", produces = "application/json" )
-    public IOU getIOU(@PathVariable UUID id){
-        //if (borrower == null || borrower.isEmpty()) {
-           //s  IOU iou=iouService.findIOUById(id);
-            //if(iou !=null){
-            //return ResponseEntity.ok(iou);
-        //}else{
-           // return ResponseEntity.notFound().build();
-        return iouService.getIOU(id);
+    public ResponseEntity <IOU> getIOU(@PathVariable UUID id){
+            IOU iou=iouService.findIOUById(id);
+            if(iou !=null){
+            return ResponseEntity.ok(iou); //return 200 ok with iou
+        }else{
+            return ResponseEntity.notFound().build(); //return 404 not found
+        
     }
+}
 
     
 //create
     @PostMapping( produces = "application/json")
     public ResponseEntity <IOU> createIou(@RequestBody IOU iou){
-        try {
+        
+       try {
         IOU savedIou =iouService.createIOU(iou);
+        if(savedIou== null || iou.getId() == null){
+           return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
         return  ResponseEntity.status(HttpStatus.CREATED).body(savedIou);
-    }catch (IllegalArgumentException exception){
+   }catch (IllegalArgumentException exception){
        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
    }catch(OptimisticLockingFailureException exception) {
-       return  ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+     return  ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     }
-}   
+    }
+
+
 
     //update
     @PutMapping(value="/{id}", produces = "application/json")
@@ -68,10 +76,15 @@ public class IOUController {
     }
 
     //delete
-    @DeleteMapping(value="/{id}",produces ="application/json")
-    public ResponseEntity <IOU> deleteIou(@PathVariable UUID id) {
-        iouService.deleteIOU(id);
-       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+   @DeleteMapping(value="/{id}",produces ="application/json")
+  public ResponseEntity <Void> deleteIou(@PathVariable UUID id) {
+   try {
+    iouService.deleteIOU(id);
+      
+    return ResponseEntity.status(HttpStatus.OK).build();
+    } catch (NoSuchElementException e) {
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-    }
+   }
+  }
 }

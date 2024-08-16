@@ -13,10 +13,10 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name ="ious")
 public class IOU  {
+
 @Id
 @GeneratedValue(strategy=GenerationType.UUID)
 
-@Column(name ="Id")
 private UUID id;
 @Column(name ="Borrower")
 private String borrower;
@@ -27,7 +27,10 @@ private BigDecimal amount;
 @Column(name="DateTime")
 private Instant dateTime;
 
+//Default UUID if id is null
+private static final UUID DEFAULT_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
+//Default constructor
 public IOU() {
     this(null,null,BigDecimal.ZERO,Instant.now());
 }
@@ -38,11 +41,16 @@ this.lender =lender;
 this.amount=amount;
 this.dateTime =dateTime;
 
+
 }
+
+
+
 
 //Getter and Setters
 public UUID getId(){
-    return this.id;
+    return id !=null ? id:DEFAULT_UUID;
+   
 }
 public String getBorrower(){
     return this.borrower;
