@@ -71,7 +71,10 @@ public List <IOU> getIOUsByBorrower(String borrower){
 return iouRepository.findByBorrower(borrower);
 }
 
+public List<IOU>getHighValueIOUs(){
+    return iouRepository.findHighValueIOUs();
 
+}
 }
 
 

@@ -46,8 +46,6 @@ public class IOUController {
 
             }
         
-
-
     //getIOU
     @GetMapping(value="/{id}", produces = "application/json" )
     public ResponseEntity <IOU> getIOU(@PathVariable UUID id){
@@ -106,6 +104,13 @@ public class IOUController {
         
    }
   }
+
+  @GetMapping(value="/high",produces = "application/json")
+ public ResponseEntity <List<IOU>> getHighValueIOUS(){
+    List<IOU> ious=iouService.getHighValueIOUs();
+    return ResponseEntity.ok(ious);
+
+ }
 
     
 }
