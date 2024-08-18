@@ -45,8 +45,6 @@ this.dateTime =dateTime;
 }
 
 
-
-
 //Getter and Setters
 public UUID getId(){
     return id !=null ? id:DEFAULT_UUID;

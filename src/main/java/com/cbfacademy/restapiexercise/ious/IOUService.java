@@ -38,12 +38,8 @@ public class IOUService {
             iouRepository.save(iou);
             return iou;
         } catch (OptimisticLockingFailureException e) {
-            // Log the exception if needed
-            // For example: logger.error("Optimistic locking failure", e);
             throw e; // Re-throw the exception to be handled by the caller
         } catch (Exception e) {
-            // Handle unexpected exceptions
-            // For example: logger.error("An unexpected error occurred", e);
             throw new RuntimeException("An unexpected error occurred while saving the IOU", e);
         }
     }
@@ -61,19 +57,21 @@ public class IOUService {
    }
 
    public void deleteIOU(UUID id) {
-    //if (!iouRepository.existsById(id)) {
-      //  throw new NoSuchElementException("IOU with ID " + id + " not found");
-    //}
     iouRepository.deleteById(id);  // Delete the IOU by id
-    
-    
+        
 }
-
 
 public IOU findIOUById(UUID id) {
     Optional<IOU> iou = iouRepository.findById(id);
         return iou.orElse(null); // Return IOU if found, otherwise return null
     }
+
+
+public List <IOU> getIOUsByBorrower(String borrower){
+return iouRepository.findByBorrower(borrower);
+}
+
+
 }
 
 

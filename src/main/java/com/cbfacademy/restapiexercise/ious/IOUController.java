@@ -1,5 +1,6 @@
 package com.cbfacademy.restapiexercise.ious;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -29,20 +31,29 @@ public class IOUController {
         this.iouService=iouService;
     }
 
-    // getAllIOUS
+    // getAllIOUs
     @GetMapping(produces = "application/json" )
-  public ResponseEntity<List<IOU>> getAllIOUs(){
-        List<IOU>ious=iouService.getAllIOUs();
-        return ResponseEntity.ok(ious);
+  public ResponseEntity<List<IOU>> getAllIOUs(@RequestParam(required = false) String borrower){
+        if (borrower == null || borrower.isEmpty()) {
+         List<IOU>ious=iouService.getAllIOUs();// call service method to getAllIous
+            return ResponseEntity.ok(ious); //return 200 ok with iou
+        } else {
+            List<IOU> ious=iouService.getIOUsByBorrower(borrower); //call service method to filter by browser 
+                return ResponseEntity.ok(ious);
+        }
+           // return ResponseEntity.ok().build();
+           //  return ResponseEntity.ok(ious); //return 200 ok with iou
+
+            }
         
-    }
+
 
     //getIOU
     @GetMapping(value="/{id}", produces = "application/json" )
     public ResponseEntity <IOU> getIOU(@PathVariable UUID id){
            try{
              IOU iou=iouService.getIOU(id);
-            if(iou !=null){
+             if(iou !=null){
             return ResponseEntity.ok(iou); //return 200 ok with iou
         }else{
             return ResponseEntity.notFound().build(); //return 404 not found
@@ -50,12 +61,11 @@ public class IOUController {
 } catch (NoSuchElementException e) {
     return ResponseEntity.notFound().build(); // Handle case where IOU is not found
 }
+
     }
 
-
-
-    
-//create
+  
+//createIOU
     @PostMapping( produces = "application/json")
     public ResponseEntity <IOU> createIou(@RequestBody IOU iou){
         
@@ -73,30 +83,30 @@ public class IOUController {
     }
 
 
-
-    //update
+    //updateIOU
     @PutMapping(value="/{id}", produces = "application/json")
     public ResponseEntity<IOU> updateIou(@PathVariable UUID id, @RequestBody IOU iou) {
         try{
         IOU updatedIou =iouService.updateIOU(id,iou);
-          return ResponseEntity.ok(updatedIou);
+          return ResponseEntity.ok(updatedIou); //return 200 ok with iou
         }catch (NoSuchElementException e) {
          return ResponseEntity.notFound().build();
        
     }
 }
 
-    //delete
+    //deleteIO
    @DeleteMapping(value="/{id}",produces ="application/json")
   public ResponseEntity <Void> deleteIou(@PathVariable UUID id) {
    try {
     iouService.deleteIOU(id);
-   // return ResponseEntity.status(HttpStatus.OK).build();
-   return ResponseEntity.ok().build();
-       
+   return ResponseEntity.ok().build(); //return 200 ok with iou     
     } catch (NoSuchElementException e) {
        return ResponseEntity.notFound().build();
         
    }
   }
+
+    
 }
+
