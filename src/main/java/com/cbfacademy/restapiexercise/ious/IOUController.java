@@ -40,14 +40,19 @@ public class IOUController {
     //getIOU
     @GetMapping(value="/{id}", produces = "application/json" )
     public ResponseEntity <IOU> getIOU(@PathVariable UUID id){
-            IOU iou=iouService.findIOUById(id);
+           try{
+             IOU iou=iouService.getIOU(id);
             if(iou !=null){
             return ResponseEntity.ok(iou); //return 200 ok with iou
         }else{
             return ResponseEntity.notFound().build(); //return 404 not found
-        
-    }
+        } 
+} catch (NoSuchElementException e) {
+    return ResponseEntity.notFound().build(); // Handle case where IOU is not found
 }
+    }
+
+
 
     
 //create
@@ -71,20 +76,27 @@ public class IOUController {
 
     //update
     @PutMapping(value="/{id}", produces = "application/json")
-    public IOU updateIou(@PathVariable UUID id, @RequestBody IOU iou) {
-       return iouService.updateIOU(id,iou);
+    public ResponseEntity<IOU> updateIou(@PathVariable UUID id, @RequestBody IOU iou) {
+        try{
+        IOU updatedIou =iouService.updateIOU(id,iou);
+          return ResponseEntity.ok(updatedIou);
+        }catch (NoSuchElementException e) {
+         return ResponseEntity.notFound().build();
+       
     }
+}
 
     //delete
    @DeleteMapping(value="/{id}",produces ="application/json")
   public ResponseEntity <Void> deleteIou(@PathVariable UUID id) {
    try {
     iouService.deleteIOU(id);
-      
-    return ResponseEntity.status(HttpStatus.OK).build();
+   // return ResponseEntity.status(HttpStatus.OK).build();
+   return ResponseEntity.ok().build();
+       
     } catch (NoSuchElementException e) {
-          return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
+       return ResponseEntity.notFound().build();
+        
    }
   }
 }

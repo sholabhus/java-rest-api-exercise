@@ -26,7 +26,7 @@ public class IOUService {
     
     public IOU getIOU(UUID id) throws NoSuchElementException {
         return iouRepository.findById(id)
-                             .orElseThrow(() -> new NoSuchElementException("IOU not found with id: " + id));
+                            .orElseThrow(() -> new NoSuchElementException("IOU with ID " + id + " not found"));
     }
     
 
@@ -34,9 +34,6 @@ public class IOUService {
         if (iou == null) {
             throw new IllegalArgumentException("IOU cannot be null");
         }
-
-        
-
         try {
             iouRepository.save(iou);
             return iou;
@@ -56,18 +53,19 @@ public class IOUService {
     //retrieve existing IOU
    IOU existingIou =getIOU(id);
    // update the fields with new data
-   existingIou.setAmount(updatedIOU.getAmount());
    existingIou.setBorrower(updatedIOU.getBorrower());
-   existingIou.setDateTime(updatedIOU.getDateTime());
    existingIou.setLender(updatedIOU.getLender());
+   existingIou.setAmount(updatedIOU.getAmount());
+   existingIou.setDateTime(updatedIOU.getDateTime());
     return iouRepository.save(existingIou);
    }
 
-   public IOU deleteIOU(UUID id) {
-    if (!iouRepository.existsById(id)) {
-        throw new NoSuchElementException("IOU with ID " + id + " not found");
-    }
+   public void deleteIOU(UUID id) {
+    //if (!iouRepository.existsById(id)) {
+      //  throw new NoSuchElementException("IOU with ID " + id + " not found");
+    //}
     iouRepository.deleteById(id);  // Delete the IOU by id
+    
     
 }
 
