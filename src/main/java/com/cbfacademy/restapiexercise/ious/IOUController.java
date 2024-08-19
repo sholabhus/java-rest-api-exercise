@@ -1,6 +1,5 @@
 package com.cbfacademy.restapiexercise.ious;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -8,7 +7,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,9 +39,6 @@ public class IOUController {
             List<IOU> ious=iouService.getIOUsByBorrower(borrower); //call service method to filter by browser 
                 return ResponseEntity.ok(ious);
         }
-           // return ResponseEntity.ok().build();
-           //  return ResponseEntity.ok(ious); //return 200 ok with iou
-
             }
         
     //getIOU
@@ -112,6 +107,12 @@ public class IOUController {
 
  }
 
-    
+ @GetMapping(value="/low", produces= "application/json")
+ public ResponseEntity <List<IOU>> getLowValueIOUS(){
+    List<IOU> ious=iouService.getLowValueIOUs();
+    return ResponseEntity.ok(ious);
+
+ }  
 }
+
 
